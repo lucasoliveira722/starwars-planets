@@ -4,7 +4,7 @@ import planetsAPI from '../services/planetsAPI';
 import './Table.css';
 
 export default function Table() {
-  const { data, setPlanets } = useContext(AppContext);
+  const { data, nameFilter, setPlanets, setNameFilter } = useContext(AppContext);
 
   useEffect(() => {
     async function fetching() {
@@ -20,18 +20,14 @@ export default function Table() {
       <br />
       <label htmlFor="search">
         Procure por um planeta
-        <input type="text" id="search" />
+        <input
+          type="text"
+          id="search"
+          onChange={ (event) => setNameFilter(event.target.value) }
+        />
       </label>
-      {/* <ol>
-        {
-          data.map((planet) => <li key={ planet.name }>{ planet.name }</li>)
-        }
-      </ol> */}
       <table>
         <tr>
-          {/* {
-            data.map((planet) => <th key={ Object.keys }>{Object.keys}</th>)
-          } */}
           <th>Name</th>
           <th>Rotation Period</th>
           <th>Orbital Period</th>
@@ -46,28 +42,27 @@ export default function Table() {
           <th>Edited</th>
           <th>URL</th>
         </tr>
-        {/* <tr>
-          {
-            data.map((planet) => <td key={ planet.name }>{planet.name}</td>)
-          }
-        </tr> */}
-        {data.map((planet, key) => (
-          <tr key={ key }>
-            <td>{planet.name}</td>
-            <td>{planet.rotation_period}</td>
-            <td>{planet.orbital_period}</td>
-            <td>{planet.diameter}</td>
-            <td>{planet.climate}</td>
-            <td>{planet.gravity}</td>
-            <td>{planet.terrain}</td>
-            <td>{planet.surface_water}</td>
-            <td>{planet.population}</td>
-            <td>{planet.films}</td>
-            <td>{planet.created}</td>
-            <td>{planet.edited}</td>
-            <td>{planet.url}</td>
-          </tr>
-        ))}
+        {
+          data
+            .filter((planet) => planet.name.toLowerCase().match(nameFilter.toLowerCase()))
+            .map((planet, key) => (
+              <tr key={ key }>
+                <td>{planet.name}</td>
+                <td>{planet.rotation_period}</td>
+                <td>{planet.orbital_period}</td>
+                <td>{planet.diameter}</td>
+                <td>{planet.climate}</td>
+                <td>{planet.gravity}</td>
+                <td>{planet.terrain}</td>
+                <td>{planet.surface_water}</td>
+                <td>{planet.population}</td>
+                <td>{planet.films}</td>
+                <td>{planet.created}</td>
+                <td>{planet.edited}</td>
+                <td>{planet.url}</td>
+              </tr>
+            ))
+        }
       </table>
     </div>);
 }
