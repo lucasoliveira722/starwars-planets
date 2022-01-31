@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import AppContext from '../Context/AppContext';
 import planetsAPI from '../services/planetsAPI';
+import './Table.css';
 
 export default function Table() {
   const { data, setPlanets } = useContext(AppContext);
@@ -9,7 +10,6 @@ export default function Table() {
     async function fetching() {
       const fetchedPlanets = await planetsAPI();
       setPlanets(data.concat(fetchedPlanets.results));
-      console.log(fetchedPlanets);
     }
     fetching();
   }, []);
@@ -17,6 +17,11 @@ export default function Table() {
   return (
     <div>
       This is our table
+      <br />
+      <label htmlFor="search">
+        Procure por um planeta
+        <input type="text" id="search" />
+      </label>
       {/* <ol>
         {
           data.map((planet) => <li key={ planet.name }>{ planet.name }</li>)
@@ -64,6 +69,8 @@ export default function Table() {
           </tr>
         ))}
       </table>
-      {console.log(data)}
     </div>);
 }
+// array de filtros filters=[{type:'status', name: 'gold'}, {type:'country', name:'sweden'}] - TYPE É O NOME DA CHAVE, E NAME É O VALOR
+// filteredResults = prodList.filter( el => filters.some (filterEl => el[filterEl.type] === filterEl.name))
+// array com todos os dados. Passa por uym filtro, depois devolve
