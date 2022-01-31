@@ -23,6 +23,7 @@ export default function Table() {
         <input
           type="text"
           id="search"
+          data-testid="name-filter"
           onChange={ (event) => setNameFilter(event.target.value) }
         />
       </label>
