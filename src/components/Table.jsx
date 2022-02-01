@@ -4,7 +4,16 @@ import planetsAPI from '../services/planetsAPI';
 import './Table.css';
 
 export default function Table() {
-  const { data, nameFilter, setPlanets, setNameFilter } = useContext(AppContext);
+  const {
+    data,
+    nameFilter,
+    selected,
+    selectedFilters,
+    setPlanets,
+    setNameFilter,
+    setSelected,
+    setSelectedFilters,
+  } = useContext(AppContext);
 
   useEffect(() => {
     async function fetching() {
@@ -14,9 +23,106 @@ export default function Table() {
     fetching();
   }, []);
 
+  const tratarDados = (linha) => {
+    const bools = [];
+    selectedFilters.forEach((filter) => {
+      switch (filter.condition) {
+      case 'maior que':
+        bools.push(Number(linha[filter.column]) >= Number(filter.value));
+        break;
+      case 'menor que':
+        bools.push(Number(linha[filter.column]) <= Number(filter.value));
+        break;
+      case 'igual a':
+        bools.push(linha[filter.column] === filter.value);
+        break;
+      default:
+        return true;
+      }
+    });
+    return bools.every((el) => el);
+  };
+
+  const tratarOpcoes = (opcao) => !selectedFilters
+    .find((filtro) => opcao === filtro.column);
+
   return (
     <div>
-      This is our table
+      <div>
+        <select
+          value={ selected.column }
+          onChange={ (e) => setSelected({ ...selected, column: e.target.value }) }
+          name="column-filter"
+          id="column-filter"
+          data-testid="column-filter"
+        >
+          {/* <option value="population">population</option>
+          <option value="orbital_period">orbital_period</option>
+          <option value="diameter">diameter</option>
+          <option value="rotation_period">rotation_period</option>
+          <option value="surface_water">surface_water</option> */}
+          {['population', 'orbital_period', 'diameter',
+            'rotation_period', 'surface_water']
+            .filter(tratarOpcoes)
+            .map((column) => (
+              <option value={ column } key={ column }>
+                {column}
+              </option>
+            ))}
+        </select>
+        <select
+          value={ selected.comparison }
+          onChange={ (e) => setSelected({ ...selected, comparison: e.target.value }) }
+          name="comparison-filter"
+          id="comparison-filter"
+          data-testid="comparison-filter"
+        >
+          <option value="maior que">maior que</option>
+          <option value="menor que">menor que</option>
+          <option value="igual a">igual a</option>
+        </select>
+        <input
+          value={ selected.value }
+          onChange={ (e) => setSelected({ ...selected, value: e.target.value }) }
+          type="number"
+          data-testid="value-filter"
+        />
+        <button
+          type="button"
+          data-testid="button-filter"
+          onClick={ () => {
+            setSelectedFilters([...selectedFilters, selected]);
+            setSelected({
+              column: '',
+              comparison: '',
+              value: 0,
+            });
+          } }
+        >
+          Filtrar
+        </button>
+      </div>
+      <br />
+      <div>
+        {selectedFilters.map((filter, index) => (
+          <div data-testid="filter" className="filters" key={ index }>
+            <button
+              type="button"
+              className="limpar"
+              onClick={ () => {
+                const cloneArray = [...selectedFilters];
+                cloneArray.splice(index, 1);
+                setSelectedFilters(cloneArray);
+              } }
+            >
+              X
+            </button>
+            {filter.column}
+            {filter.comparison}
+            {filter.value}
+          </div>
+        ))}
+      </div>
       <br />
       <label htmlFor="search">
         Procure por um planeta
@@ -46,6 +152,7 @@ export default function Table() {
         {
           data
             .filter((planet) => planet.name.toLowerCase().match(nameFilter.toLowerCase()))
+            .filter(tratarDados)
             .map((planet, key) => (
               <tr key={ key }>
                 <td>{planet.name}</td>

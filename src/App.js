@@ -6,7 +6,7 @@ import Provider from './Context/Provider';
 function App() {
   return (
     <Provider>
-      <span>Hello, App!</span>
+      <h1>Star Wars Planets - Trybe</h1>
       <Table />
     </Provider>
   );
