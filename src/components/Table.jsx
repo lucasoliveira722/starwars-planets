@@ -26,7 +26,7 @@ export default function Table() {
   const tratarDados = (linha) => {
     const bools = [];
     selectedFilters.forEach((filter) => {
-      switch (filter.condition) {
+      switch (filter.comparison) {
       case 'maior que':
         bools.push(Number(linha[filter.column]) >= Number(filter.value));
         break;
@@ -40,6 +40,7 @@ export default function Table() {
         return true;
       }
     });
+    // console.log(bools.every((el) => el), bools);
     return bools.every((el) => el);
   };
 
@@ -151,8 +152,9 @@ export default function Table() {
         </tr>
         {
           data
-            .filter((planet) => planet.name.toLowerCase().match(nameFilter.toLowerCase()))
-            .filter(tratarDados)
+            .filter((planet) => planet.name.toLowerCase()
+              .match(nameFilter.toLowerCase()) && (tratarDados(planet)))
+            // .filter(tratarDados)
             .map((planet, key) => (
               <tr key={ key }>
                 <td>{planet.name}</td>
