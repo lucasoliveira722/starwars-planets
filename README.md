@@ -8,7 +8,7 @@ Este projeto consiste em uma página feita com React, com o propósito de buscar
 - Os hooks `useState, useContext e useEffect`;
 - Criação de React Hooks customizados
 
-# How to run and test the application 👨‍💻
+# Como executar e testar a aplicação: 👨‍💻
 
  * Clonar esse repositório, digitando `git clone git@github.com:lucasoliveira722/starwars-planets.git` no terminal em sua máquina;
  * Instalar as dependências digitando `npm i`;
@@ -24,7 +24,7 @@ This project consists on a React page, with the purpose of searching for the pla
 - `useState, useContext e useEffect` React Hooks;
 - Creation of customized React Hooks
 
-# How to run and test the application 👨‍💻
+# How to run and test the application: 👨‍💻
 
  * Clone this repository, by tiping `git clone git@github.com:lucasoliveira722/starwars-planets.git` in the terminal;
  * Install the dependencies with `npm i`;
